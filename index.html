@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Gelişmiş duyusal lezzet profilleri, akıllı eşleşme motoru ve dinamik görsel temalar ile Türk & Akdeniz mutfağı keşif platformu.">
+  <meta name="theme-color" content="#0a0d14">
+  <title>GustoVerese | Otonom Lezzet & Eşleşme Keşif Deneyimi</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Core Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-category="all">
+
+  <!-- Dynamic Ambient Glow Element -->
+  <div class="ambient-glow" id="ambientGlow1" aria-hidden="true"></div>
+  <div class="ambient-glow-secondary" id="ambientGlow2" aria-hidden="true"></div>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="nav-container">
+      <a href="#" class="brand-wrapper" id="brandReset" title="GustoVerese Ana Sayfa">
+        <div class="brand-icon">✨</div>
+        <div>
+          <h1 class="brand-title">GustoVerese</h1>
+          <span class="brand-subtitle">Duyusal Gastronomi Keşfi</span>
+        </div>
+      </a>
+
+      <div class="nav-actions">
+        <!-- Live Internet API Status / Discovery Trigger -->
+        <button class="live-api-badge" id="liveFetchBtn" title="İnternetten Canlı Küresel Gurme Tarifi Getir (TheMealDB & TheCocktailDB API)">
+          <span class="live-indicator-dot"></span>
+          <span id="liveStatusText">Canlı API: Çevrimiçi</span>
+        </button>
+
+        <!-- Glow Light Controller -->
+        <div class="glow-control-panel" title="Arka Plan Ambiyans Işığı Ayarı">
+          <button class="glow-toggle-btn" id="glowToggleBtn" title="Işıkları Aç / Kapat">💡</button>
+          <input type="range" min="0" max="100" value="70" class="glow-slider" id="glowIntensitySlider" title="Işık Yoğunluğu" aria-label="Işık Parlaklığı">
+        </div>
+
+        <button class="btn-icon-action" id="themeToggleBtn" title="Tema Değiştir (Işık / Gece)">
+          <span id="themeModeIcon">🌙</span>
+        </button>
+        <button class="btn-icon-action" id="favToggleBtn" title="Kaydedilen Lezzetlerim">
+          <span>❤️</span>
+          <span class="badge-count" id="favBadge">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Showcase Section -->
+    <section class="hero-section">
+      <div class="hero-grid">
+        <div class="hero-text-content">
+          <div class="hero-badge">
+            <span>✨</span>
+            <span>Otonom Gurme Asistanı Aktif</span>
+          </div>
+          <h2 class="hero-heading">
+            Duyuların ve Damak Tadının <span>Özgün Uyumu</span>
+          </h2>
+          <p class="hero-description">
+            Ege deniz mahsullerinden zırh kebaplarına, meşe fıçılı eliksirlerden taş havanda dövülmüş taze mezelere uzanan lezzet matrisini keşfedin. Akıllı eşleşme motoru ile kusursuz menüyü tasarlayın.
+          </p>
+        </div>
+
+        <!-- Dynamic Live Pairing Teaser -->
+        <aside class="hero-pairing-card" aria-label="Günün Akıllı Eşleşmesi">
+          <span class="card-tag">Akıllı Eşleşme İnovasyonu</span>
+          <h3 class="card-title">Kusursuz Gurme Düeti</h3>
+          <div class="pairing-matchup" id="heroPairingDisplay">
+            <!-- Populated via app.js -->
+          </div>
+          <button class="btn-surprise-me" id="surprisePairingBtn">
+            <span>🎲</span>
+            <span>Beni Şaşırt! Rastgele Kusursuz Eşleştir</span>
+          </button>
+        </aside>
+      </div>
+    </section>
+
+    <!-- Search & Filter Control Hub -->
+    <section class="control-hub" aria-label="Arama ve Filtreleme">
+      <!-- Search Bars: Dual Search for Lezzet & Özel Yöre Arama -->
+      <div class="search-controls-grid">
+        <!-- Main Search Bar -->
+        <div class="search-bar-wrapper">
+          <div class="search-input-container">
+            <span class="search-icon-left" aria-hidden="true">🔍</span>
+            <input 
+              type="search" 
+              id="searchInput" 
+              class="search-input" 
+              placeholder="Lezzet ismi, malzeme veya tat profili (ör: köz, acı, hafif, somon)..."
+              aria-label="Lezzet ve içecek ara"
+              autocomplete="off"
+            >
+            <button class="search-clear-btn" id="searchClearBtn" title="Aramayı Temizle">✕</button>
+            
+            <!-- Visual Dropdown for Main Search -->
+            <div class="search-visual-dropdown" id="searchVisualDropdown" role="listbox"></div>
+          </div>
+          <!-- Magnifying Glass Search Button -->
+          <button class="search-action-btn" id="mainSearchBtn" title="Lezzet Ara">
+            <span>🔍</span>
+          </button>
+        </div>
+
+        <!-- Dedicated Origin / Region Search Bar -->
+        <div class="search-bar-wrapper">
+          <div class="search-input-container">
+            <span class="search-icon-left" aria-hidden="true">📍</span>
+            <input 
+              type="search" 
+              id="originSearchInput" 
+              class="search-input search-input-origin" 
+              placeholder="Yöre veya Şehir ara (ör: Ege, Antakya, Antep, Adana, Cunda)..."
+              aria-label="Yöre veya Şehir ara"
+              autocomplete="off"
+            >
+            <button class="search-clear-btn" id="originClearBtn" title="Yöre Aramasını Temizle">✕</button>
+
+            <!-- Visual Dropdown for Origin Search -->
+            <div class="search-visual-dropdown" id="originVisualDropdown" role="listbox"></div>
+          </div>
+          <!-- Magnifying Glass Origin Search Button -->
+          <button class="search-action-btn" id="originSearchBtn" title="Yöreye Göre Ara">
+            <span>🔍</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Region / Origin Filter Pills -->
+      <div class="origin-select-chips" id="originChipsContainer" aria-label="Popüler Yöreler">
+        <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-right: 0.2rem;">Popüler Yöreler:</span>
+        <button class="origin-pill active" data-origin="all">Tüm Yöreler</button>
+        <button class="origin-pill" data-origin="Ege">🌊 Ege & Cunda</button>
+        <button class="origin-pill" data-origin="Antakya">🫒 Hatay & Antakya</button>
+        <button class="origin-pill" data-origin="Gaziantep">🌶️ Adana & Antep</button>
+        <button class="origin-pill" data-origin="İstanbul">⛵ Boğaziçi & İstanbul</button>
+        <button class="origin-pill" data-origin="İzmir">🌿 İzmir & Urla</button>
+      </div>
+
+      <!-- Category Filter Tabs -->
+      <nav class="category-nav" id="categoryNav" aria-label="Kategori Seçimi">
+        <!-- Injected dynamically via app.js -->
+      </nav>
+
+      <!-- Sensory Mood & Meta Bar -->
+      <div class="sub-filters">
+        <div class="mood-selector" id="moodFilterContainer">
+          <span class="mood-title">Duyusal Ruh Hali:</span>
+          <!-- Injected via app.js -->
+        </div>
+        <div class="results-meta" id="resultsCount">
+          Toplam <span>16</span> benzersiz lezzet keşfedildi
+        </div>
+      </div>
+    </section>
+
+    <!-- Dynamic Culinary Grid -->
+    <section class="culinary-section" aria-label="Lezzet Kartları">
+      <div class="items-grid" id="itemsGrid">
+        <!-- Rendered dynamically via app.js -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Interactive Sensory Dish Modal / Drawer -->
+  <div class="modal-backdrop" id="dishModalBackdrop" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="dish-modal" id="dishModal">
+      <button class="modal-close-btn" id="modalCloseBtn" aria-label="Pencereyi Kapat">✕</button>
+      
+      <div class="modal-hero-cover">
+        <img src="" alt="" class="modal-cover-img" id="modalImg">
+        <div class="modal-cover-gradient"></div>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-header-meta">
+          <span class="dish-category-label" id="modalCategory">KATEGORİ</span>
+          <span class="dish-price" id="modalPrice">₺0</span>
+        </div>
+        <h2 class="modal-title" id="modalTitle">Lezzet Başlığı</h2>
+        <p class="modal-tagline" id="modalTagline">Açıklama ve içerik detayları</p>
+
+        <!-- Quick Specs (Time, Temp, Calories) -->
+        <div class="specs-row" id="modalSpecs">
+          <!-- Populated dynamically -->
+        </div>
+
+        <!-- Sensory Flavor Spectrum Bars -->
+        <div class="sensory-dashboard">
+          <div class="sensory-heading">
+            <span>📊</span>
+            <span>Duyusal Lezzet Spektrumu & Aroma Dengesi</span>
+          </div>
+          <div class="flavor-bars" id="modalFlavorBars">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <!-- Chef's Secret Box -->
+        <div class="chef-secret-box">
+          <div class="chef-secret-header">
+            <span>👨‍🍳</span>
+            <span>Şefin Gizli Notu & Hazırlanış Dokunuşu</span>
+          </div>
+          <p class="chef-secret-text" id="modalChefSecret"></p>
+        </div>
+
+        <!-- Intelligent Pairing Recommendations -->
+        <div class="modal-pairings-section">
+          <h3 class="pairings-title">
+            <span>🍷</span>
+            <span>Önerilen Tamamlayıcı Eşleşmeler</span>
+          </h3>
+          <div class="pairing-cards-grid" id="modalPairingsGrid">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Favorites Side Drawer -->
+  <aside class="favorites-drawer" id="favoritesDrawer" aria-label="Favori Lezzetlerim" aria-hidden="true">
+    <div class="fav-header">
+      <h3 class="fav-title">
+        <span>❤️</span>
+        <span>Favori Lezzetlerim</span>
+      </h3>
+      <button class="btn-icon-action" id="favCloseBtn" aria-label="Favorileri Kapat">✕</button>
+    </div>
+    <div class="fav-list" id="favList">
+      <!-- Populated dynamically -->
+    </div>
+  </aside>
+
+  <!-- Interactive Toast Notification -->
+  <div class="toast-notice" id="toastNotice" role="status" aria-live="polite"></div>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <p><strong>GustoVerese</strong> &copy; 2026 &bull; Otonom Kreatif Yemek & İçecek Keşif Mimarisi &bull; Vanilla HTML5/CSS3/ES6+</p>
+  </footer>
+
+  <!-- Main ES6 Application Logic -->
+  <script type="module" src="app.js"></script>
+</body>
+</html>
+
